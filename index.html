@@ -107,26 +107,26 @@
 							<header class="major">
 								<h2>Book an Appointment</h2>
 							</header>
-							<form method="post" action="#">
+							<form name="submit-to-google-sheet">
 								<div class="row gtr-uniform">
 									<div class="col-6 col-12-xsmall">
-										<input type="text" name="name" id="name" value="" placeholder="Name" />
+										<input type="text" name="name" id="name" value="" placeholder="Name" required/>
 									</div>
 									<div class="col-6 col-12-xsmall">
-										<input type="email" name="email" id="email" value="" placeholder="Email" />
+										<input type="email" name="email" id="email" value="" placeholder="Email" required/>
 									</div>
 									<div class="col-6 col-12-xsmall">
-										<input type="tel" name="tel" id="tel" value="" placeholder="Mobile" />
+										<input type="tel" name="tel" id="tel" value="" placeholder="Mobile" required/>
 									</div>
 									<div class="col-6 col-12-xsmall">
-										<input type="date" name="date" id="date" value="" placeholder="Preferred date" />
+										<input type="date" name="date" id="date" value="" placeholder="Preferred date" min="<?= date('Y-m-d'); ?>" required/>
 									</div>
 									<div class="col-12">
 										<textarea name="message" id="message" placeholder="Enter any additonal info" rows="6"></textarea>
 									</div>
 									<div class="col-12">
 										<ul class="actions">
-											<li><input type="submit" value="Book an Appointment" class="primary" /></li>
+											<li><input type="submit" value="Book an Appointment" class="primary" id="submitId" /></li>
 										</ul>
 									</div>
 								</div>
@@ -148,7 +148,7 @@
 								</li>
 								<li>
 									<h4 class="icon solid fa-envelope"> Email: </h4>
-									<p><a href="mailto:niti4.np@gmail.com">niti4.np@gmail.com</a></p>
+									<p><a href="mailto:nitiksha@nitiphysiocare.in">nitiksha@nitiphysiocare.in</a></p>
 									<h4 class="icon solid fa-phone"> Phone: </h4>
 									<p>(+91) 63662-72489</p>
 								</li>
@@ -178,5 +178,22 @@
 			<script src="assets/js/main.js"></script>
 			<script src="assets/js/lazyload.js"></script>
 			<script src="https://apps.elfsight.com/p/platform.js" defer></script>
+			<script>
+				const scriptURL = 'https://script.google.com/macros/s/AKfycbyKJMJfrRy0xSbdg5OTV6QvGpNZzJTl2Agr9GTtM4Bulfc9QERG_hSG1SeUFoNMuSpKNQ/exec'
+				const form = document.forms['submit-to-google-sheet']
+				
+				form.addEventListener('submit', e => {
+					e.preventDefault()
+					fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+					.then(response => console.log('Success!', response))
+					.catch(error => console.error('Error!', error.message))
+					.finally(() => cleanup(form))
+				})
+			
+				function cleanup(form) {
+					document.querySelector('#submitId').value = 'Thanks! We\'ll be in touch.';
+					form.reset();
+				}
+			</script>
 	</body>
 </html>
